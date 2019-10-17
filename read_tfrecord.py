@@ -2,6 +2,15 @@ from __future__ import print_function
 import tensorflow as tf
 
 def parse_TFRecord_file(dir, file_name):
+  """ Convert data from TFRecord file to an array of SequenceExample
+
+  Params:
+    dir: String of the directory contains the file to be converted
+    file_name: String of the file name
+
+  Return:
+    Array of SequenceExamples saved in the file
+  """
   # ==DEPRECATED==
   # # Read TFRecord file with python.io record iterator
   # record_iterator = tf.python_io.tf_record_iterator(path=file_dir)
@@ -80,10 +89,21 @@ def parse_TFRecord_file(dir, file_name):
   return parsed_data
   
 def extract_data_by_label(parsed_data, label, output_dir, file_name):
+  """Extract SequenceExamples by their label (can extract Examples NOT having a label)
+
+    Params:
+      parsed_data: Array of SequenceExamples to extract from
+      label: Int value of the label
+      output_dir: String of the directory to write the output file having one extracted 
+      Example to
+      file_name: String of the file's name
+
+    Return: None
+  """
   count = 0
   for parsed_record in parsed_data:
     # PARSED_RECORD FORMART: 
-    # ({'labels': <tensorflow.python.framework.sparse_tensor>,
+    # ({'labels': <tensorflow.python.framework.sparse_tensor (tf.sparse.Sparse.Tensor)>,
     # 'start_time_seconds': <tf.Tensor>, 'video_id': <tf.Tensor>,
     # 'end_time_seconds': <tf.Tensor>}, 
     # {'audio_embedding': <tensorflow.python.framework.sparse_tensor>})
@@ -114,13 +134,42 @@ def extract_data_by_label(parsed_data, label, output_dir, file_name):
         writer.write(sequence_example_str)
     count = count + 1 
 
-tf.compat.v1.enable_eager_execution()
-# Directory of data from AudioSet
-tfrecord_dir = "../audioset/audioset_v1_embeddings/bal_train/"
-# Data file to extract from
-tfrecord_file = "1P.tfrecord"
-parsed_data = parse_TFRecord_file(tfrecord_dir, tfrecord_file)
-# Directory to put extracted data
-output_dir = "../audioset/cough/"
-label = 47
-extract_data_by_label(parsed_data, label, output_dir, tfrecord_file)
+def build_train_data_from_TFRecord(dir, file_name, cough_positive):
+  """ Build the array of training data for SVM
+
+  Params: 
+    dir: String of the directory contains the file 
+    file_name: String of the file's name
+    cough_positive: Boolean indicating the data is cough or not
+
+  Return:
+    Array of training data with each example on one line
+    Array of label corresponding to the data
+  """
+  data = []
+  label = []
+  parsed_data = parse_TFRecord_file(dir, file_name)
+  for parsed_record in parsed_data:
+    data.append(parsed_record[1]['audio_embedding'].values.numpy())
+    label_value_np = parsed_record[0]['labels'].values.numpy()
+    if 47 in label_value_np:
+      label.append(0)
+    else:
+      label.append(1)
+  return data, label
+
+def main():
+  tf.compat.v1.enable_eager_execution()
+  # Directory of data from AudioSet
+  tfrecord_dir = "../audioset/audioset_v1_embeddings/bal_train/"
+  # Data file to extract from
+  tfrecord_file = "1P.tfrecord"
+  parsed_data = parse_TFRecord_file(tfrecord_dir, tfrecord_file)
+  # Directory to put extracted data
+  output_dir = "../audioset/cough/"
+  label = 47
+  extract_data_by_label(parsed_data, label, output_dir, tfrecord_file)
+
+if __name__ == "__main__":
+    main()
+
