@@ -1,7 +1,7 @@
 from __future__ import print_function
 import tensorflow as tf
 
-def readTFRecordSamples(dir, file_name):
+def parse_TFRecord_file(dir, file_name):
   # ==DEPRECATED==
   # # Read TFRecord file with python.io record iterator
   # record_iterator = tf.python_io.tf_record_iterator(path=file_dir)
@@ -77,11 +77,10 @@ def readTFRecordSamples(dir, file_name):
     return parsed_example
 
   parsed_data = raw_data.map(_parse_function)
-
-  # Directory to put extracted data
-  output_dir = "../audioset/not cough/"
+  return parsed_data
+  
+def extract_data_by_label(parsed_data, label, output_dir, file_name):
   count = 0
-
   for parsed_record in parsed_data:
     # PARSED_RECORD FORMART: 
     # ({'labels': <tensorflow.python.framework.sparse_tensor>,
@@ -92,7 +91,7 @@ def readTFRecordSamples(dir, file_name):
     # video_id = parsed_record[0]['video_id']
     embeddings_np = parsed_record[1]['audio_embedding'].values.numpy()
     # tf.print("Labels: {} /n Embedding: {}".format(label_value_np, embeddings_np))
-    if 47 not in label_value_np:
+    if label in label_value_np:
       context = {
         'labels': tf.train.Feature(int64_list=tf.train.Int64List(value=label_value_np))
       }
@@ -119,5 +118,9 @@ tf.compat.v1.enable_eager_execution()
 # Directory of data from AudioSet
 tfrecord_dir = "../audioset/audioset_v1_embeddings/bal_train/"
 # Data file to extract from
-tfrecord_file = "0m.tfrecord"
-readTFRecordSamples(tfrecord_dir, tfrecord_file)
+tfrecord_file = "1P.tfrecord"
+parsed_data = parse_TFRecord_file(tfrecord_dir, tfrecord_file)
+# Directory to put extracted data
+output_dir = "../audioset/cough/"
+label = 47
+extract_data_by_label(parsed_data, label, output_dir, tfrecord_file)
