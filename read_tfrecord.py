@@ -60,7 +60,7 @@ def parse_TFRecord_file(dir, file_name):
   # for name, tensor in sequence_data.items():
   #   print('{}: {}'.format(name, tensor.eval()))
 
-  # ==RECOMMENDED IN 1.4 VERSION==
+  # ==RECOMMENDED IN tf 1.14 VERSION==
   # Read TFRecord file with tf.data.TFRECORDDATASET
   raw_data = tf.data.TFRecordDataset(dir+file_name)
 
@@ -134,13 +134,12 @@ def extract_data_by_label(parsed_data, label, output_dir, file_name):
         writer.write(sequence_example_str)
     count = count + 1 
 
-def build_train_data_from_TFRecord(dir, file_name, cough_positive):
+def array_from_TFRecord(dir, file_name):
   """ Build the array of training data for SVM
 
   Params: 
     dir: String of the directory contains the file 
     file_name: String of the file's name
-    cough_positive: Boolean indicating the data is cough or not
 
   Return:
     Array of training data with each example on one line
@@ -171,5 +170,5 @@ def main():
   extract_data_by_label(parsed_data, label, output_dir, tfrecord_file)
 
 if __name__ == "__main__":
-    main()
+  main()
 
