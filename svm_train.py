@@ -21,8 +21,6 @@ def build_train_data(dir):
     filename = os.fsdecode(file)
     if filename.endswith('.tfrecord'):
       data_from_file, label_from_file = array_from_TFRecord(dir, filename)
-      # for i in range(0, len(label_from_file)): 
-        #length of label = length of data = number of records in file
       data.extend(data_from_file)
       label.extend(label_from_file)
   return data, label
