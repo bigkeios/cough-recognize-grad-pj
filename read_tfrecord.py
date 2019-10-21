@@ -149,12 +149,12 @@ def array_from_TFRecord(dir, file_name):
   label = []
   parsed_data = parse_TFRecord_file(dir, file_name)
   for parsed_record in parsed_data:
-    data.append(parsed_record[1]['audio_embedding'].values.numpy())
+    data.append(list(parsed_record[1]['audio_embedding'].values.numpy()))
     label_value_np = parsed_record[0]['labels'].values.numpy()
     if 47 in label_value_np:
-      label.append(0)
-    else:
       label.append(1)
+    else:
+      label.append(-1)
   return data, label
 
 def main():
@@ -163,11 +163,13 @@ def main():
   tfrecord_dir = "../audioset/audioset_v1_embeddings/bal_train/"
   # Data file to extract from
   tfrecord_file = "1P.tfrecord"
-  parsed_data = parse_TFRecord_file(tfrecord_dir, tfrecord_file)
-  # Directory to put extracted data
-  output_dir = "../audioset/cough/"
-  label = 47
-  extract_data_by_label(parsed_data, label, output_dir, tfrecord_file)
+  # parsed_data = parse_TFRecord_file(tfrecord_dir, tfrecord_file)
+  # # Directory to put extracted data
+  # output_dir = "../audioset/cough/"
+  # label = 47
+  # extract_data_by_label(parsed_data, label, output_dir, tfrecord_file)
+  data, label = array_from_TFRecord(tfrecord_dir, tfrecord_file)
+  print(data)
 
 if __name__ == "__main__":
   main()
