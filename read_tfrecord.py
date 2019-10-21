@@ -149,7 +149,16 @@ def array_from_TFRecord(dir, file_name):
   label = []
   parsed_data = parse_TFRecord_file(dir, file_name)
   for parsed_record in parsed_data:
-    data.append(list(parsed_record[1]['audio_embedding'].values.numpy()))
+    embeddings_np = parsed_record[1]['audio_embedding'].values.numpy()
+    # convert embedding of one record in bytestring to int (unsigned) and append it
+    int_embeddings =[]
+    # each element in embeddings array corresponds to a second of the audio
+    for embedding in embeddings_np:
+      hexembed = embedding.hex()
+      #128-element embeddings for one second is added
+      int_embeddings.extend([int(hexembed[i:i+2],16) for i in range(0,len(hexembed),2)])
+    data.append(int_embeddings)
+    # append class's label
     label_value_np = parsed_record[0]['labels'].values.numpy()
     if 47 in label_value_np:
       label.append(1)
