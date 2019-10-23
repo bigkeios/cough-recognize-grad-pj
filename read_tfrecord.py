@@ -112,6 +112,7 @@ def extract_data_by_label(parsed_data, label, output_dir, file_name):
     embeddings_np = parsed_record[1]['audio_embedding'].values.numpy()
     # tf.print("Labels: {} /n Embedding: {}".format(label_value_np, embeddings_np))
     if label in label_value_np:
+      # might need to add checking length of audio extracted (end_time - start time)
       context = {
         'labels': tf.train.Feature(int64_list=tf.train.Int64List(value=label_value_np))
       }
@@ -135,7 +136,7 @@ def extract_data_by_label(parsed_data, label, output_dir, file_name):
     count = count + 1 
 
 def array_from_TFRecord(dir, file_name):
-  """ Build the array of training data for SVM
+  """ Extract data from TFRecord to an array
 
   Params: 
     dir: String of the directory contains the file 
@@ -166,19 +167,37 @@ def array_from_TFRecord(dir, file_name):
       label.append(-1)
   return data, label
 
+def build_train_data(dir):
+  """ Build training data array from data saved in a folder
+
+    Params:
+      dir: String of directory storing traing data
+    Return:
+      Array of training data with each example on one row
+      Array of label corresponding with training data
+  """
+  folder = os.fsencode(dir)
+  data = []
+  label = []
+  for file in os.listdir(folder):
+    filename = os.fsdecode(file)
+    if filename.endswith('.tfrecord'):
+      data_from_file, label_from_file = array_from_TFRecord(dir, filename)
+      data.extend(data_from_file)
+      label.extend(label_from_file)
+  return data, label
+
 def main():
   tf.compat.v1.enable_eager_execution()
-  # Directory of data from AudioSet
+  # Directory of data from AudioSet. Name is to be changed
   tfrecord_dir = "../audioset/audioset_v1_embeddings/bal_train/"
-  # Data file to extract from
-  tfrecord_file = "1P.tfrecord"
-  # parsed_data = parse_TFRecord_file(tfrecord_dir, tfrecord_file)
-  # # Directory to put extracted data
-  # output_dir = "../audioset/cough/"
-  # label = 47
-  # extract_data_by_label(parsed_data, label, output_dir, tfrecord_file)
-  data, label = array_from_TFRecord(tfrecord_dir, tfrecord_file)
-  print(data)
+  # Data file to extract from. Name is to be changed
+  tfrecord_file = "0q.tfrecord"
+  parsed_data = parse_TFRecord_file(tfrecord_dir, tfrecord_file)
+  # Directory to put extracted data. Name is to be changed
+  output_dir = "../audioset/not cough/"
+  label = 47
+  extract_data_by_label(parsed_data, label, output_dir, tfrecord_file)
 
 if __name__ == "__main__":
   main()

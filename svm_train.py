@@ -1,30 +1,10 @@
-from read_tfrecord import array_from_TFRecord
+from read_tfrecord import array_from_TFRecord, build_train_data
 import os
 from sklearn.svm import SVC
 from sklearn.model_selection import train_test_split
 import pickle
 import tensorflow as tf
 import numpy as np
-
-def build_train_data(dir):
-  """ Build training data array
-
-    Params:
-      dir: String of directory storing traing data
-    Return:
-      Array of training data with each example on one row
-      Array of label corresponding with training data
-  """
-  folder = os.fsencode(dir)
-  data = []
-  label = []
-  for file in os.listdir(folder):
-    filename = os.fsdecode(file)
-    if filename.endswith('.tfrecord'):
-      data_from_file, label_from_file = array_from_TFRecord(dir, filename)
-      data.extend(data_from_file)
-      label.extend(label_from_file)
-  return data, label
 
 def main():
   tf.compat.v1.enable_eager_execution()
