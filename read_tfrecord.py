@@ -1,5 +1,6 @@
 from __future__ import print_function
 import tensorflow as tf
+import os
 
 def parse_TFRecord_file(dir, file_name):
   """ Convert data from TFRecord file to an array of SequenceExample

@@ -1,10 +1,8 @@
 from read_tfrecord import array_from_TFRecord, build_train_data
-import os
 from sklearn.svm import SVC
 from sklearn.model_selection import train_test_split
 import pickle
 import tensorflow as tf
-import numpy as np
 
 def main():
   tf.compat.v1.enable_eager_execution()
