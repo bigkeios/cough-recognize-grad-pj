@@ -1,6 +1,7 @@
 from read_tfrecord import array_from_TFRecord, build_train_data
+from sklearn import preprocessing
 from sklearn.svm import SVC
-from sklearn.model_selection import train_test_split
+from sklearn.model_selection import train_test_split, GridSearchCV
 import pickle
 import tensorflow as tf
 
