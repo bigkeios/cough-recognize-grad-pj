@@ -1,4 +1,4 @@
-from read_tfrecord import array_from_TFRecord, build_train_data
+from read_tfrecord import build_train_data
 from sklearn import preprocessing
 from sklearn.svm import SVC
 from sklearn.model_selection import train_test_split, GridSearchCV
@@ -27,7 +27,7 @@ def cv_train_simple(data, label):
   scores = cross_val_score(svm_model, data, label, cv=10)
   # evaluate
   print(scores)
-  print("Accuracy: %0.2f (+/- %0.2f)" % (scores.mean(), scores.std() * 2))
+  print("Accuracy: {0:.2f} (+/- {1:.2f})".format(scores.mean(), scores.std() * 2))
 
 def grid_search_cv_train(data, label):
   # TRAIN AND FIND BEST HYPERPARAMS WITH CROSS VALIDATION AND GRID SEARCH
@@ -44,7 +44,7 @@ def grid_search_cv_train(data, label):
   means = grid_search.cv_results_['mean_test_score']
   stds = grid_search.cv_results_['std_test_score']
   for mean, std, params in zip(means, stds, grid_search.cv_results_['params']):
-    print("%0.3f (+/-%0.03f) for %r" % (mean, std * 2, params))
+    print("{0:.3f} (+/-{1:.03f}) for {2}".format(mean, std * 2, params))
 
 def main():
   tf.compat.v1.enable_eager_execution()
@@ -55,8 +55,8 @@ def main():
 
   # simple_train(data_scaled, label)
   # cv_train_simple(data_scaled, label)
-  grid_search_cv_train(data_scaled, label)
-  #save model trained
+  svm_best = grid_search_cv_train(data_scaled, label)
+  # save model trained
   # print("Saving model...")
   # model_filename = "svm_model.pkl"
   # with open(model_filename, "wb") as file:

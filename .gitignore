@@ -104,3 +104,4 @@ venv.bak/
 .mypy_cache/
 
 svm_train_1.py
+svm_train_report.*
