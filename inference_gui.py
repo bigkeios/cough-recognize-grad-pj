@@ -47,6 +47,9 @@ class MainApp(Frame):
     self.record_button = Button(self, text="From new recording", command=self.record_frm)
     self.record_button.pack()
 
+    # to show the prediction
+    self.predict_label = Label(self)
+
   def open_file_frm(self):
     def select_file():
       open_file_frm.f_dir = filedialog.askopenfilename(
@@ -54,12 +57,10 @@ class MainApp(Frame):
       title = "Select file",
       filetypes = (("wav files","*.wav"),("tfrecord files","*.tfrecord"), ("all files","*.*"))
       )
+      # if file is selected
       if type(open_file_frm.f_dir) != tuple:
-        # Process directory -> file name and directory leads to it (in relation w
-        # folder running this)
-        # f_dir = os.path.dirname(open_file_frm.f_dir)
-        f_name = os.path.basename(open_file_frm.f_dir)
         rel_file_dir = os.path.relpath(open_file_frm.f_dir)
+        f_name = os.path.basename(open_file_frm.f_dir)
         # Start predicting
         if f_name.endswith('.tfrecord'):
           predict = svm_predict_file(rel_file_dir)
@@ -105,7 +106,6 @@ class MainApp(Frame):
     record_frm.button.pack()
     
   def print_predict(self, predict):
-    self.predict_label = Label(self)
     if 1 in predict:
       self.predict_label['text'] = "The audio contains COUGH"
     elif -1 in predict:

@@ -2,7 +2,7 @@ from __future__ import print_function
 import tensorflow as tf
 import os
 
-def parse_TFRecord_file(dir, file_name):
+def parse_TFRecord_file(file_dir):
   """ Convert data from TFRecord file to an array of SequenceExample
 
   Params:
@@ -63,7 +63,7 @@ def parse_TFRecord_file(dir, file_name):
 
   # ==RECOMMENDED IN tf 1.14 VERSION==
   # Read TFRecord file with tf.data.TFRECORDDATASET
-  raw_data = tf.data.TFRecordDataset(dir+file_name)
+  raw_data = tf.data.TFRecordDataset(file_dir)
 
   # Context features
   context_features = {
@@ -136,7 +136,7 @@ def extract_data_by_label(parsed_data, label, output_dir, file_name):
         writer.write(sequence_example_str)
     count = count + 1 
 
-def array_from_TFRecord(dir, file_name):
+def array_from_TFRecord(file_dir):
   """ Extract data from TFRecord to an array
 
   Params: 
@@ -149,7 +149,7 @@ def array_from_TFRecord(dir, file_name):
   """
   data = []
   label = []
-  parsed_data = parse_TFRecord_file(dir, file_name)
+  parsed_data = parse_TFRecord_file(file_dir)
   for parsed_record in parsed_data:
     embeddings_np = parsed_record[1]['audio_embedding'].values.numpy()
     # convert embedding of one record in bytestring to int (unsigned) and append it
