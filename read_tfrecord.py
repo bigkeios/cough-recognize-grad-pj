@@ -183,7 +183,7 @@ def build_train_data(dir):
   for file in os.listdir(folder):
     filename = os.fsdecode(file)
     if filename.endswith('.tfrecord'):
-      data_from_file, label_from_file = array_from_TFRecord(dir, filename)
+      data_from_file, label_from_file = array_from_TFRecord(dir+filename)
       data.extend(data_from_file)
       label.extend(label_from_file)
   return data, label
@@ -194,7 +194,7 @@ def main():
   tfrecord_dir = "../audioset/audioset_v1_embeddings/bal_train/"
   # Data file to extract from. Name is to be changed
   tfrecord_file = "0q.tfrecord"
-  parsed_data = parse_TFRecord_file(tfrecord_dir, tfrecord_file)
+  parsed_data = parse_TFRecord_file(tfrecord_dir+tfrecord_file)
   # Directory to put extracted data. Name is to be changed
   output_dir = "../audioset/not cough/"
   label = 47
