@@ -104,7 +104,6 @@ class MainApp(Frame):
     record_frm.button = Button(record_frm, text="Press to start", command=record)
     record_frm.button.pack()
     
-
   def print_predict(self, predict):
     self.predict_label = Label(self)
     if 1 in predict:
