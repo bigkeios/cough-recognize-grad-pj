@@ -8,7 +8,7 @@ scipy 1.3
 scikit-learn 0.21
 on Ubuntu 18.04
 
-**This project uses VGGish so model checkpoints and PCA params are required (for post-processing) when running inference or training SVM:**  
+**This project uses a model called [VGGish](https://github.com/tensorflow/models/tree/master/research/audioset/vggish) so checkpoints and PCA params are required (for post-processing) when running inference or training SVM:**  
 [VGGish model checkpoint](https://storage.googleapis.com/audioset/vggish_model.ckpt)  
 [Embedding PCA parameters](https://storage.googleapis.com/audioset/vggish_pca_params.npz)  
 Put them in the same directory with README  
