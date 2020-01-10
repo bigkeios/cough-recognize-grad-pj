@@ -1,5 +1,7 @@
 # Posts and Telecommunications Institute of Technology - IT Graduation Project (D15 2015-2020)
 
+TLDR this project aims to classify audios into cough - not cough. To do so, I used VGGish for features extraction and SVM for classification. More details can be found in my reports.  
+
 **Tested with:**  
 python 3.6  
 tensorflow 1.14  
