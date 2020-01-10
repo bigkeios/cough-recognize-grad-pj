@@ -5,7 +5,7 @@ python 3.6
 tensorflow 1.14  
 numpy 1.17  
 scipy 1.3  
-scikit-learn 0.21
+scikit-learn 0.21  
 on Ubuntu 18.04
 
 **This project uses a model called [VGGish](https://github.com/tensorflow/models/tree/master/research/audioset/vggish) so checkpoints and PCA params are required (for post-processing) when running inference or training SVM:**  
